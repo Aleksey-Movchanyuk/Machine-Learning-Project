@@ -30,13 +30,18 @@ rm.na.cols     <- function(x) { x[ , colSums( is.na(x) ) < nrow(x) ] }
 
 training.train <- rm.na.cols(training.train)
 training.test  <- rm.na.cols(training.test)
+testing <- rm.na.cols(testing)
 
 
 ## Removes any variables with missing NAs
 complete       <- function(x) {x[,sapply(x, function(y) !any(is.na(y)))] }
+incompl        <- function(x) {names( x[,sapply(x, function(y) any(is.na(y)))] ) }
 
+trtr.na.var    <- incompl(training.train)
+trts.na.var    <- incompl(training.test)
 training.train <- complete(training.train)
 training.test  <- complete(training.test)
+testing  <- complete(testing)
 
 
 ## Train a model 
@@ -59,3 +64,17 @@ confusionMatrix(predict(random.forest,
 
 ## Plot most importance fetures
 plot( varImp(random.forest) )
+
+
+## Predict user activity
+pred <- predict(random.forest, testing)
+
+
+## Save result into separate file
+pml_write_files <- function(x){
+        n = length(x)
+        for(i in 1:n){
+                filename = paste0("problem_id_",i,".txt")
+                write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+        }
+}
