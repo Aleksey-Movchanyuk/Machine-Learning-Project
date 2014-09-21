@@ -1,7 +1,7 @@
 Practical Machine Learning Course Project
 ========================================================
 Aleksey Movchanyuk  
-21 September 201
+21 September 2014
 
 
 ## Abstract
